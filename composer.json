@@ -1,0 +1,28 @@
+{
+  "name": "macopedia/mess_detector",
+  "type": "typo3-cms-extension",
+  "description": "This package will help you check how messed up your TYPO3 instance is.",
+  "keywords": [
+    "TYPO3",
+    "extension"
+  ],
+  "homepage": "http://macopedia.pl",
+  "authors": [
+    {
+      "name": "Tymoteusz Motylewski",
+      "role": "Developer",
+      "homepage": "http://macopedia.pl"
+    }
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms-core": ">=8.3.0,<8.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Macopedia\\MessDetector\\": "Classes"
+    }
+  }
+}
