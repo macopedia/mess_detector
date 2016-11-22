@@ -39,6 +39,9 @@ class DatabaseIntegrityCommandController extends CommandController
             if (!empty($tca['ctrl']['delete'])) {
                 $select[] = $tca['ctrl']['delete'];
             }
+            if (!empty($tca['ctrl']['languageField'])) {
+                $select[] = $tca['ctrl']['languageField'];
+            }
             if (!empty($tca['ctrl']['label'])) {
                 $select[] = $tca['ctrl']['label'];
             }
@@ -89,7 +92,7 @@ class DatabaseIntegrityCommandController extends CommandController
             // Remove all default restrictions (delete, hidden, starttime, stoptime)
             $queryBuilder->getRestrictions()
                 ->removeAll();
-            $select = [$table . '.uid', $table . '.pid', $table . '.' . $tca['ctrl']['transOrigPointerField']];
+            $select = [$table . '.uid', $table . '.pid', $table . '.' . $tca['ctrl']['languageField'], $table . '.' . $tca['ctrl']['transOrigPointerField']];
             if (!empty($tca['ctrl']['delete'])) {
                 $select[] = $table . '.' . $tca['ctrl']['delete'];
             }
@@ -109,7 +112,7 @@ class DatabaseIntegrityCommandController extends CommandController
                     )
                 )
                 ->where(
-                    $queryBuilder->expr()->neq($table . '_parent.' . $tca['ctrl']['transOrigPointerField'], 0)
+                    $queryBuilder->expr()->neq($table . '_parent.' . $tca['ctrl']['languageField'], 0)
                 )
                 ->execute()
                 ->fetchAll();
