@@ -127,7 +127,7 @@ class L10nParentCommandController extends CommandController
     }
 
     /**
-     * Finds all records which l10n_parent field value equals uid
+     * Finds all records which l10n_parent field value equals uid or are are in default language but have l10nparent set
      *
      * @param string $tableName pass table name if you want to run the check on a single table
      * @return void
@@ -158,14 +158,20 @@ class L10nParentCommandController extends CommandController
                 ->select(...$select)
                 ->from($table)
                 ->where(
-                    $queryBuilder->expr()->eq('uid', $tca['ctrl']['transOrigPointerField'])
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->eq('uid', $tca['ctrl']['transOrigPointerField']),
+                        $queryBuilder->expr()->andX(
+                            $queryBuilder->expr()->eq($tca['ctrl']['languageField'], 0),
+                            $queryBuilder->expr()->neq($tca['ctrl']['transOrigPointerField'], 0)
+                        )
+                    )
                 )
                 ->execute()
                 ->fetchAll();
             $this->outputLine('Checking table: ' . $table);
             if (!empty($rows)) {
                 $this->outputLine('Following records have transOrigPointerField (l10n_parent) field value equal to uid');
-                $this->outputLine('Record should not be itself parent');
+                $this->outputLine('or have l10n_parent set and are in the default language.');
                 $this->outputLine('Query run:');
                 $this->outputLine($queryBuilder->getSQL());
                 $this->output->outputTable($rows, array_keys($rows[0]));
